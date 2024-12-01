@@ -1,43 +1,33 @@
-import { useEffect, useState } from "react";
-import io from "socket.io-client";
+import { useState, useEffect } from "react";
+import { io } from "socket.io-client";
 
-const socket = io("http://192.168.20.55:3000");
+const socket = io("http://localhost:3003");
 
-function App() {
-  const [chats, setChats] = useState([]);
-  const [chat, setChat] = useState([]);
-
+const App = () => {
+  const [message, setMessage] = useState("");
+  
   useEffect(() => {
     socket.on("message", (message) => {
-      setChats((prevChats) => [...prevChats, message]);
+      console.log("Message received:", message);
     });
-
-    return () => {
-      socket.off("message");
-    };
-  });
+  }, []);
 
   const sendMessage = () => {
-    socket.emit("message", chat);
-  };
+    socket.emit("message", message)
+  }
 
   return (
     <>
-      <h1>Chat App Mate!</h1>
-      <p>Welcome to Sora group chat!</p>
-      <input type="text" onChange={(e) => setChat(e.target.value)} />
-      <button onClick={sendMessage}>Send</button>
-
-      <h1>Chats</h1>
-      {chats && (
-        <>
-          {chats.map((chat, index) => (
-            <p key={index}>{chat}</p>
-          ))}
-        </>
-      )}
+      <div>
+        <h1>Chat App</h1>
+        <div>
+          <input type="text" placeholder="Enter your message" />
+          <button>Send</button>
+        </div>
+        <h2>Chats</h2>
+      </div>
     </>
   );
-}
+};
 
 export default App;
