@@ -1,12 +1,17 @@
+const { config } = require("dotenv");
 const express = require("express");
 const app = express();
 const http = require("http");
 const { Server } = require("socket.io");
+require("dotenv").config();
+
+const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || "localhost";
 
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
@@ -29,6 +34,6 @@ app.get("/gomu", (req, res) => {
   res.send("Siddhei IT Operations!");
 });
 
-server.listen(3000, () => {
+server.listen(PORT, HOST, () => {
   console.log("listening to port 3000");
 });
