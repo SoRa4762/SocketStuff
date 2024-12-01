@@ -9,9 +9,14 @@ const App = () => {
 
   useEffect(() => {
     socket.on("message", (message) => {
-      console.log("Message received:", message);
+      console.log("Received Message: ", message);
+      setMessages((prevMsg) => [...prevMsg, message]);
     });
-  }, []);
+
+    return () => {
+      socket.off("message");
+    };
+  });
 
   const sendMessage = () => {
     socket.emit("message", message);
@@ -19,18 +24,23 @@ const App = () => {
 
   return (
     <>
+      <h1>Chat App</h1>
       <div>
-        <h1>Chat App</h1>
-        <div>
-          <input
-            type="text"
-            placeholder="Enter your message"
-            onChange={(e) => setMessage(e.target.value)}
-          />
-          <button onClick={sendMessage}>Send</button>
-        </div>
-        <h2>Chats</h2>
+        <input
+          type="text"
+          placeholder="Enter your message"
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <button onClick={sendMessage}>Send</button>
       </div>
+      <h2>Chats</h2>
+      {messages && (
+        <>
+          {messages.map((msg, index) => (
+            <div key={index}>{msg}</div>
+          ))}
+        </>
+      )}
     </>
   );
 };
