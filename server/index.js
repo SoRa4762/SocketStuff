@@ -2,11 +2,14 @@ const express = require("express");
 const { Server } = require("socket.io");
 const app = express();
 const http = require("http");
+const cors = require("cors");
+
+app.use(cors());
 
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://localhost:5173",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
   },
 });
@@ -28,4 +31,4 @@ app.use("/", (req, res) => {
   res.send("Hello!!");
 });
 
-app.listen(PORT, () => console.log("server running on port: ", PORT));
+server.listen(PORT, () => console.log("server running on port: ", PORT));
