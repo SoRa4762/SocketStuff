@@ -4,19 +4,19 @@ import { io } from "socket.io-client";
 const socket = io("http://localhost:3003");
 
 const App = () => {
-  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState("");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     socket.on("message", (message) => {
-      console.log("Received Message: ", message);
+      console.log("Message received: ", message);
       setMessages((prevMsg) => [...prevMsg, message]);
     });
 
     return () => {
       socket.off("message");
     };
-  });
+  }, []);
 
   const sendMessage = () => {
     socket.emit("message", message);
@@ -33,11 +33,14 @@ const App = () => {
         />
         <button onClick={sendMessage}>Send</button>
       </div>
-      <h2>Chats</h2>
+
       {messages && (
         <>
+          <h2>Chats</h2>
           {messages.map((msg, index) => (
-            <div key={index}>{msg}</div>
+            <div key={index}>
+              <p>{msg}</p>
+            </div>
           ))}
         </>
       )}
