@@ -4,12 +4,11 @@ import { io } from "socket.io-client";
 const socket = io("http://localhost:3003");
 
 const App = () => {
-  const [messages, setMessages] = useState("");
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState("");
 
   useEffect(() => {
     socket.on("message", (message) => {
-      console.log("Message received: ", message);
       setMessages((prevMsg) => [...prevMsg, message]);
     });
 
@@ -29,6 +28,7 @@ const App = () => {
         <input
           type="text"
           placeholder="Enter your message"
+          value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
         <button onClick={sendMessage}>Send</button>
@@ -38,9 +38,7 @@ const App = () => {
         <>
           <h2>Chats</h2>
           {messages.map((msg, index) => (
-            <div key={index}>
-              <p>{msg}</p>
-            </div>
+            <div key={index}>{msg}</div>
           ))}
         </>
       )}
